@@ -1,2 +1,2 @@
 # gg
-describe a game then play it
+Describe a game, then play it.

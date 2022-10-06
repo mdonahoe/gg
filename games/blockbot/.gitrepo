@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:mdonahoe/blockbot.git
 	branch = main
-	commit = 190456d799c44ea4397d3f48eec42bcd236b46d4
-	parent = 588e071c05afecf5f2a9491fcfd71f739ead6823
+	commit = cc7cb63cb35cf727f4f9a69aeac75e038ded9260
+	parent = a2c557d73c9ecf912461262dc151b1bf4764b853
 	method = merge
 	cmdver = 0.4.5

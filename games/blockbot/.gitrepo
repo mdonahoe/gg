@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:mdonahoe/blockbot.git
+	branch = main
+	commit = 190456d799c44ea4397d3f48eec42bcd236b46d4
+	parent = 588e071c05afecf5f2a9491fcfd71f739ead6823
+	method = merge
+	cmdver = 0.4.5

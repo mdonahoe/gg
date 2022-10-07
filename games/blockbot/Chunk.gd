@@ -2,12 +2,14 @@ extends StaticBody
 
 const DIMENSION = Vector3(16,50,16)
 
-# Ensures terrain gen does not elongate based on chunk size/resolution so terrain at a chunk 30 blocks tall still looks the same as a 50 block tall chunk
+# Ensures terrain gen does not elongate based on chunk size/resolution so terrain
+# at a chunk 30 blocks tall still looks the same as a 50 block tall chunk
 # It ensures structures and trees have the ability to grow should 
 const Gen_Height = 50
 
 # Moves terrain height up and down chunk 
-# NOTE: this is applied after the gen height calculation, that means it will affect the final output of Gen_Height
+# NOTE: this is applied after the gen height calculation, that means it will affect
+# the final output of Gen_Height
 const Block_offset = 1
 
 var mat = preload("res://assets/TextureAtlasMaterial.tres")
@@ -15,7 +17,7 @@ var rng = RandomNumberGenerator.new()
 # Make this load from a file
 const texture_atlas_size = Vector2(8, 4)
 
-var generator = load("res://chunk_generators/BorealGenerator.gd")
+var generator = load("res://chunk_generators/DesertGenerator.gd")
 
 const v = [
 	Vector3(0, 0, 0), #0
@@ -67,7 +69,9 @@ func _ready():
 	mat.albedo_texture.set_flags(2)
 
 func _set_block_data(x, y, z, b, overwrite = true):
-	if x >= 0 and x < DIMENSION.x and y >= 0 and y < DIMENSION.y and z >= 0 and z < DIMENSION.z:
+	if (x >= 0 and x < DIMENSION.x and
+		y >= 0 and y < DIMENSION.y and
+		z >= 0 and z < DIMENSION.z):
 		if overwrite or _block_data[x][y][z].type == "Air":
 			_block_data[x][y][z] = b
 
@@ -94,7 +98,8 @@ func generate(w, cx, cz):
 			_block_data[x][y].resize(DIMENSION.z)
 			for z in DIMENSION.z:
 				var b = BlockData.new()
-				var h_noise = (world.height_noise.get_noise_2d(x + cx * DIMENSION.x, z + cz * DIMENSION.z) + 1) / 2.0
+				var noise_2d = world.height_noise.get_noise_2d(x + cx * DIMENSION.x, z + cz * DIMENSION.z)
+				var h_noise = (noise_2d + 1) / 2.0
 				ground_height[x][z] = int(h_noise * (Gen_Height - 1) + 1) + Block_offset
 				b.create(generator.generate_surface(ground_height[x][z], x, y, z))
 				_set_block_data(x, y, z, b)

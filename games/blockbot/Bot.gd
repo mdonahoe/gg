@@ -12,41 +12,65 @@ var jump_vel = 5
 
 var paused = false
 var goal_block = Vector3(0,0,0)
+var state = "init"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
 
+func set_state(new_state):
+	if new_state != state:
+		print(new_state)
+		state = new_state
 
 
-func _physics_process(delta):	
-	var cx = floor(self.translation.x / Chunk.DIMENSION.x)
-	var cz = floor(self.translation.z / Chunk.DIMENSION.z)
-	var px = self.translation.x - cx * Chunk.DIMENSION.x
-	var py = self.translation.y
-	var pz = self.translation.z - cz * Chunk.DIMENSION.z
-	var snap = Vector3(px, py, pz)
-	var chunk_center = Vector3(floor(self.translation.x), self.translation.y, floor(self.translation.z))
-	if not paused:
-		if is_on_floor():  # TODO(matt): why doesn't the bot fall?
-			# TODO(matt): this works ok, but it would be better to check the grid explicitly
-			# Currently the bot can fly in the air if the goal_block is below the bot's feet.
-			# We'd rather have the bot move gracefully to the center of the closest block.
-			# without jumping up or down a level.
-			velocity.y = 0
-			var dp = goal_block - self.translation
-			dp.y = 0
-			if dp.length() > 0.5:
-				# TODO(matt): rotate the bot in the cardinal direction that best aligns with dp.
-				move_and_collide(dp * delta)
-				anim.play("Run-loop")
-			else:
-				anim.play("Idle-loop")
-		else:
-			velocity.y -= gravity * delta
-			velocity = move_and_slide(velocity, Vector3.UP)
-			anim.play("Fall-loop")
+func _physics_process(delta):
+	if paused:
+		return
+	var new_state = "..."
+	
+	# Where is the goal relative to the bot?
+	var dp = goal_block - self.translation
+	
+	if is_on_floor():
+		velocity.y = 0
+		
+		# If the goal is higher than the bot, it needs to jump.
+		if dp.y > 1:
+			new_state = "jump"
+			anim.play("Jump")
+			velocity.y = jump_vel
+	else:
+		# If bot is airborne, apply gravity.
+		velocity.y -= gravity * delta
+
+	# Adjust xz velocity based on distance from goal.
+	var dist = dp.length()
+	
+	self.rotation.y = lerp_angle( self.rotation.y, atan2( dp.x, dp.z ), 1 ) 
+
+	if dist > 0.8:
+		new_state = "fast"
+		var direction = dp.normalized() * SPEED
+		velocity.x = direction.x
+		velocity.z = direction.z
+		anim.play("Run-loop")
+	elif dist < 0.5:
+		new_state = "stop"
+		velocity.x = 0
+		velocity.z = 0
+		anim.play("Idle-loop")
+	else:
+		new_state = "slow"
+
+	
+	if velocity.y < -1:
+		anim.play("Fall-loop")
+		new_state = "fall"
+	
+	set_state(new_state)
+	velocity = move_and_slide(velocity, Vector3.UP)
 
 
-func _process(delta):
+func _process(_delta):
 	pass

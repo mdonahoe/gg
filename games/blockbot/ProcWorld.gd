@@ -34,7 +34,8 @@ func _thread_gen(userdata):
 		var dt = now - start_loop_time
 		if dt > 1000000:
 			var loops_per_sec = loop_counter * 1000000.0 / dt
-			print("fps = %f" % loops_per_sec)
+			# TODO(matt): put this on a stats view
+			# print("fps = %f" % loops_per_sec)
 			loop_counter = 0
 			start_loop_time = now
 		# Check if player in new chunk

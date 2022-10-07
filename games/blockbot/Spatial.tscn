@@ -43,6 +43,6 @@ transform = Transform( 0.909614, 0.00915034, -0.415354, 0.415455, -0.0200341, 0.
 shadow_enabled = true
 
 [node name="BlockOutline" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 93.9682, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 73.546, 0 )
 mesh = SubResource( 3 )
 material/0 = ExtResource( 3 )

@@ -15,7 +15,7 @@ var rng = RandomNumberGenerator.new()
 # Make this load from a file
 const texture_atlas_size = Vector2(8, 4)
 
-var generator = load("res://chunk_generators/ForestGenerator.gd")
+var generator = load("res://chunk_generators/BorealGenerator.gd")
 
 const v = [
 	Vector3(0, 0, 0), #0

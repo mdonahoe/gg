@@ -1,13 +1,12 @@
 extends Spatial
-tool
+
+# NOTE(matt): this line would allow the script to run in the editor.
+# tool
 
 var pw
 onready var player = $Player
 onready var block_outline = $BlockOutline
 onready var bot = $Bot
-
-var chunk_x = 1
-var chunk_z = 1
 
 var Chunk = load("res://Chunk.gd")
 var ProcWorld = load("res://ProcWorld.gd")
@@ -18,12 +17,14 @@ func _ready():
 	print("CREATING WORLD")
 	pw = ProcWorld.new()
 	add_child(pw)
-	self.connect("tree_exiting", self, "_on_WorldScript_tree_exiting")
 	
 	player.connect("place_block", self, "_on_Player_place_block")
 	player.connect("destroy_block", self, "_on_Player_destroy_block")
 	player.connect("highlight_block", self, "_on_Player_highlight_block")
 	player.connect("unhighlight_block", self, "_on_Player_unhighlight_block")
+	
+	# TODO(matt): wtf is this?
+	self.connect("tree_exiting", self, "_on_WorldScript_tree_exiting")
 	#self.connect("tree_exited", self, "_on_WorldScript_tree_exited")
 
 func _process(delta):
@@ -37,21 +38,18 @@ func _process(delta):
 		# If its a new chunk update for the ProcWorld thread
 		if new_chunk_pos != chunk_pos:
 			chunk_pos = new_chunk_pos
-			#pw.update_player_pos(chunk_pos)
 			pw.call_deferred("update_player_pos", chunk_pos)
 
 func _on_WorldScript_tree_exiting():
 	print("Kill map loading thread")
 	if pw != null:
 		pw.call_deferred("kill_thread")
-		#pw.kill_thread()
-		#pw.thread.wait_to_finish()
 	print("Finished")
 
 func _on_Player_destroy_block(pos, norm):
 	# Take a half step into the block
 	pos -= norm * 0.5
-	bot.goal_block = pos
+
 	
 	# Get chunk from pos
 	var cx = int(floor(pos.x / Chunk.DIMENSION.x))
@@ -61,8 +59,7 @@ func _on_Player_destroy_block(pos, norm):
 	var bx = fposmod(floor(pos.x), Chunk.DIMENSION.x) + 0.5
 	var by = fposmod(floor(pos.y), Chunk.DIMENSION.y) + 0.5
 	var bz = fposmod(floor(pos.z), Chunk.DIMENSION.z) + 0.5
-	#pw.change_block(cx, cz, bx, by, bz, "Air")
-	# pw.call_deferred("change_block", cx, cz, bx, by, bz, "Air")
+	pw.call_deferred("change_block", cx, cz, bx, by, bz, "Air")
 
 func _on_Player_place_block(pos, norm, t):
 	# Take a half step out of the block
@@ -76,8 +73,9 @@ func _on_Player_place_block(pos, norm, t):
 	var bx = fposmod(floor(pos.x), Chunk.DIMENSION.x) + 0.5
 	var by = fposmod(floor(pos.y), Chunk.DIMENSION.y) + 0.5
 	var bz = fposmod(floor(pos.z), Chunk.DIMENSION.z) + 0.5
-	#pw.change_block(cx, cz, bx, by, bz, t)
-	pw.call_deferred("change_block", cx, cz, bx, by, bz, t)
+	# NOTE(matt): right-click to move the bot rather than create a block.
+	# pw.call_deferred("change_block", cx, cz, bx, by, bz, t)
+	bot.goal_block = pos
 
 func _on_Player_highlight_block(pos, norm):
 	block_outline.visible = true

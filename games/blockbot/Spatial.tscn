@@ -39,7 +39,7 @@ script = ExtResource( 5 )
 environment = SubResource( 2 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 0.909614, 0.00915035, -0.415355, 0.415455, -0.0200341, 0.909393, 0, -0.999757, -0.0220249, 0, 61.131, 0 )
+transform = Transform( 0.909614, 0.00915034, -0.415354, 0.415455, -0.0200341, 0.909393, 0, -0.999757, -0.0220249, -3.24948, 63.4612, -1.3352 )
 shadow_enabled = true
 
 [node name="BlockOutline" type="MeshInstance" parent="."]

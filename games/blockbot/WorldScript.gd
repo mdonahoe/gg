@@ -4,6 +4,7 @@ tool
 var pw
 onready var player = $Player
 onready var block_outline = $BlockOutline
+onready var bot = $Bot
 
 var chunk_x = 1
 var chunk_z = 1
@@ -50,6 +51,7 @@ func _on_WorldScript_tree_exiting():
 func _on_Player_destroy_block(pos, norm):
 	# Take a half step into the block
 	pos -= norm * 0.5
+	bot.goal_block = pos
 	
 	# Get chunk from pos
 	var cx = int(floor(pos.x / Chunk.DIMENSION.x))
@@ -60,7 +62,7 @@ func _on_Player_destroy_block(pos, norm):
 	var by = fposmod(floor(pos.y), Chunk.DIMENSION.y) + 0.5
 	var bz = fposmod(floor(pos.z), Chunk.DIMENSION.z) + 0.5
 	#pw.change_block(cx, cz, bx, by, bz, "Air")
-	pw.call_deferred("change_block", cx, cz, bx, by, bz, "Air")
+	# pw.call_deferred("change_block", cx, cz, bx, by, bz, "Air")
 
 func _on_Player_place_block(pos, norm, t):
 	# Take a half step out of the block

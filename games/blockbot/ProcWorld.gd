@@ -26,7 +26,6 @@ func _ready():
 
 
 func _thread_gen(userdata):
-	var i = 0
 	var loop_counter = 0
 	# Center map generation on the player
 	var start_loop_time = Time.get_ticks_usec()
@@ -45,7 +44,6 @@ func _thread_gen(userdata):
 		# Make sure we aren't making a shallow copy
 		_chunk_pos = Vector2(_new_chunk_pos.x, _new_chunk_pos.y)
 		var current_chunk_pos = Vector2(_new_chunk_pos.x, _new_chunk_pos.y)
-		i += 1
 		loop_counter += 1
 		if player_pos_updated:
 			# If new chunk unload unneeded chunks (changed to be entirely done off main thread if I understand correctly, fixling some stuttering I was feeling

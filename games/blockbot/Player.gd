@@ -3,7 +3,6 @@ extends KinematicBody
 onready var camera = $CameraBase/Camera
 onready var camera_base = $CameraBase
 onready var raycast = $CameraBase/Camera/RayCast
-onready var cube_outline = $CubeOutline
 onready var info_label = $CameraBase/Camera/Label
 
 var Chunk = load("res://Chunk.gd")

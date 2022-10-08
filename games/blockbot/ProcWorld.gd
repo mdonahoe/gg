@@ -47,7 +47,8 @@ func _thread_gen(userdata):
 		var current_chunk_pos = Vector2(_new_chunk_pos.x, _new_chunk_pos.y)
 		loop_counter += 1
 		if player_pos_updated:
-			# If new chunk unload unneeded chunks (changed to be entirely done off main thread if I understand correctly, fixling some stuttering I was feeling
+			# If new chunk unload unneeded chunks (changed to be entirely done off main thread
+			# if I understand correctly, fixling some stuttering I was feeling
 			enforce_render_distance(current_chunk_pos)
 			# Make sure player chunk is loaded
 			_last_chunk = _load_chunk(current_chunk_pos.x, current_chunk_pos.y)
@@ -122,7 +123,8 @@ func enforce_render_distance(current_chunk_pos):
 		#Checks and deletes the offending chunks all in one go 
 	for v in _loaded_chunks.keys():
 		# Anywhere you directly interface with chunks outside of unloading
-		if abs(v.x - current_chunk_pos.x) > load_radius or abs(v.y - current_chunk_pos.y) > load_radius:
+		if (abs(v.x - current_chunk_pos.x) > load_radius
+		 or abs(v.y - current_chunk_pos.y) > load_radius):
 			chunk_mutex.lock()
 			print("erasing chunk %d %d" % [v.x, v.y])
 			_loaded_chunks[v].free()

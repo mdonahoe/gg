@@ -1,0 +1,125 @@
+[gd_scene format=2]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_top = -24.0
+margin_right = 16.0
+margin_bottom = -24.0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = 728.0
+margin_top = 48.0
+margin_right = 982.0
+margin_bottom = 295.0
+color = Color( 0, 0, 0, 0.392157 )
+
+[node name="Button1" type="Button" parent="ColorRect"]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 66.0
+margin_bottom = 66.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 25, 25 )
+disabled = true
+clip_text = true
+
+[node name="Button2" type="Button" parent="ColorRect"]
+margin_left = 72.0
+margin_top = 16.0
+margin_right = 122.0
+margin_bottom = 66.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 25, 25 )
+clip_text = true
+
+[node name="Button3" type="Button" parent="ColorRect"]
+margin_left = 128.0
+margin_top = 16.0
+margin_right = 178.0
+margin_bottom = 66.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 25, 25 )
+clip_text = true
+
+[node name="Button4" type="Button" parent="ColorRect"]
+margin_left = 184.0
+margin_top = 16.0
+margin_right = 234.0
+margin_bottom = 66.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 24, 24 )
+clip_text = true
+
+[node name="Button5" type="Button" parent="ColorRect"]
+margin_left = 16.0
+margin_top = 71.0
+margin_right = 66.0
+margin_bottom = 121.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 24, 24 )
+clip_text = true
+
+[node name="Button6" type="Button" parent="ColorRect"]
+margin_left = 72.0
+margin_top = 71.0
+margin_right = 122.0
+margin_bottom = 121.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 25, 25 )
+clip_text = true
+
+[node name="Button7" type="Button" parent="ColorRect"]
+margin_left = 128.0
+margin_top = 71.0
+margin_right = 178.0
+margin_bottom = 121.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 25, 25 )
+clip_text = true
+
+[node name="Button8" type="Button" parent="ColorRect"]
+margin_left = 184.0
+margin_top = 71.0
+margin_right = 234.0
+margin_bottom = 121.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 25, 25 )
+clip_text = true
+
+[node name="Button9" type="Button" parent="ColorRect"]
+margin_left = 16.0
+margin_top = 127.0
+margin_right = 66.0
+margin_bottom = 177.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 24, 24 )
+clip_text = true
+
+[node name="Button10" type="Button" parent="ColorRect"]
+margin_left = 72.0
+margin_top = 127.0
+margin_right = 122.0
+margin_bottom = 177.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 24, 24 )
+clip_text = true
+
+[node name="Button11" type="Button" parent="ColorRect"]
+margin_left = 128.0
+margin_top = 127.0
+margin_right = 178.0
+margin_bottom = 177.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 24, 24 )
+clip_text = true
+
+[node name="Button12" type="Button" parent="ColorRect"]
+margin_left = 184.0
+margin_top = 127.0
+margin_right = 234.0
+margin_bottom = 177.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 24, 24 )
+clip_text = true

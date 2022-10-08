@@ -13,6 +13,39 @@ var jump_vel = 5
 var paused = false
 var goal_block = Vector3(0,0,0)
 var state = "init"
+var turns = [Vector3.FORWARD, Vector3.RIGHT, Vector3.BACK, Vector3.LEFT]
+var turn_index = 0
+
+var actions = ["turn-right", "forward", "forward", "turn-right", "forward", "forward", "forward", "turn-left", "forward"]
+var action_index = -1
+var action_complete = false
+
+func do_action():
+	if not is_on_floor():
+		# cant complete an action until on the ground
+		return
+		
+	if action_complete:
+		action_index += 1
+		# pop an action from the queue
+		if action_index >= len(actions):
+			return
+		var action: String = actions[action_index]
+		print("next action", action, action_index)
+		action_complete = false
+		
+		if action == "forward":
+			goal_block += turns[turn_index]
+		if action == "turn-right":
+			turn_index = (turn_index + 1) % len(turns)
+			action_complete = true
+		if action == "turn-left":
+			turn_index = (turn_index - 1) % len(turns)
+			action_complete = true
+	else:
+		pass
+		
+		
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -20,7 +53,7 @@ func _ready():
 
 func set_state(new_state):
 	if new_state != state:
-		print(new_state)
+		# print(new_state)
 		state = new_state
 
 
@@ -55,11 +88,13 @@ func _physics_process(delta):
 		velocity.x = direction.x
 		velocity.z = direction.z
 		anim.play("Run-loop")
-	elif dist < 0.5:
+	elif dist < 0.5 or velocity.length() < 0.1:
 		new_state = "stop"
 		velocity.x = 0
 		velocity.z = 0
 		anim.play("Idle-loop")
+		action_complete = true
+		do_action()
 	else:
 		new_state = "slow"
 

@@ -94,6 +94,11 @@ func _physics_process(delta):
 			velocity.z = direction.z * SPEED
 		velocity.y -= gravity * delta
 		velocity = move_and_slide(velocity, Vector3.UP)
+		
+		if self.translation.y < -50:
+			print("respawning...")
+			self.translation = Vector3(0, 100, 0)
+			
 
 func _process(delta):
 	if Input.is_action_just_pressed("pause"):

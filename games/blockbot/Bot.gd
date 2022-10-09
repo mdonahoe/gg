@@ -105,6 +105,10 @@ func _physics_process(delta):
 	
 	set_state(new_state)
 	velocity = move_and_slide(velocity, Vector3.UP)
+	
+	if self.translation.y < -50:
+		print("bot respawning...")
+		self.translation = Vector3(0, 100, 0)
 
 
 func _process(_delta):

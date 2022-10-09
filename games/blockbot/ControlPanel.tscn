@@ -123,3 +123,12 @@ margin_bottom = 177.0
 rect_min_size = Vector2( 50, 50 )
 rect_pivot_offset = Vector2( 24, 24 )
 clip_text = true
+
+[node name="Dragger" type="Label" parent="."]
+margin_left = 184.0
+margin_top = 152.0
+margin_right = 234.0
+margin_bottom = 166.0
+rect_rotation = -15.0
+rect_pivot_offset = Vector2( 25, 7.00003 )
+text = "dragged"

@@ -21,10 +21,13 @@ onready var btns = [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10,
 
 onready var bot = get_node("../Bot")
 
+onready var dragger = get_node("Dragger")
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("btn1", btns)
+	dragger.visible = false
 	var i = 0
 	for btn in btns:
 		if i < len(bot.actions):
@@ -37,6 +40,32 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	dragger.rect_position = get_global_mouse_position()
+	if Input.is_action_just_pressed("click"):
+		dragger.visible = true
+		for btn in btns:
+			if btn.visible:
+				var pos = btn.get_local_mouse_position()
+				var rect = Rect2(Vector2.ZERO, btn.rect_size)
+				var mouseIsOverButton = rect.has_point(pos)
+				if mouseIsOverButton:
+					dragger.text = btn.text
+					btn.text = ""
+	elif Input.is_action_just_released("click"):
+		bot.actions = []
+		for btn in btns:
+			if btn.visible:
+				var pos = btn.get_local_mouse_position()
+				var rect = Rect2(Vector2.ZERO, btn.rect_size)
+				var mouseIsOverButton = rect.has_point(pos)
+				if mouseIsOverButton:
+					btn.text = dragger.text
+					dragger.text = ""
+			bot.actions.append(btn.text)
+					
+	elif not Input.is_action_pressed("click"):
+		dragger.visible = false
+		
 	if bot.action_index > -1 and bot.action_index < len(btns):
 		for btn in btns:
 			btn.disabled = true

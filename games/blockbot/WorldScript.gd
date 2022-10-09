@@ -76,6 +76,7 @@ func _on_Player_place_block(pos, norm, t):
 	# NOTE(matt): right-click to move the bot rather than create a block.
 	# pw.call_deferred("change_block", cx, cz, bx, by, bz, t)
 	bot.goal_block = pos
+	bot.action_index = -1
 
 func _on_Player_highlight_block(pos, norm):
 	block_outline.visible = true

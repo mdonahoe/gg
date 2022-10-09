@@ -4,6 +4,7 @@ var Chunk = load("res://Chunk.gd")
 
 onready var anim = get_node("AnimationPlayer")
 onready var player = get_node("../Player")
+onready var goal_outline = get_node("../GoalBlock")
 
 const SPEED = 5
 var velocity = Vector3.ZERO
@@ -19,6 +20,11 @@ var turn_index = 0
 var actions = []
 var action_index = -1
 var action_complete = false
+var kick_time = 0.0
+
+func set_goal_block(pos: Vector3):
+	goal_block = pos
+	goal_outline.translation = pos
 
 func do_action():
 	if not is_on_floor():
@@ -43,7 +49,8 @@ func do_action():
 			turn_index = (turn_index - 1) % len(turns)
 			action_complete = true
 		if action == "kick":
-			anim.play("Kick")
+			kick_time = 1.0
+			# action is NOT complete.
 	else:
 		pass
 		
@@ -84,7 +91,13 @@ func _physics_process(delta):
 	
 	self.rotation.y = lerp_angle( self.rotation.y, atan2( dp.x, dp.z ), 1 ) 
 
-	if dist > 0.8:
+	if kick_time > 0:
+		anim.play("Kick")
+		kick_time -= delta
+		if kick_time < delta:
+			print("kick_complete")
+			action_complete = true
+	elif dist > 0.8:
 		new_state = "fast"
 		var direction = dp.normalized() * SPEED
 		velocity.x = direction.x

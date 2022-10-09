@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:mdonahoe/Godot-Inventory-System.git
+	branch = master
+	commit = 4833e2c2dea742d68eda6dcc36012431bed3cc0a
+	parent = 7d0ff53a8f8f72cf88bf85552faac3798f03f10e
+	method = merge
+	cmdver = 0.4.5

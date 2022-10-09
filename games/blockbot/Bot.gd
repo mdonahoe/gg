@@ -16,7 +16,7 @@ var state = "init"
 var turns = [Vector3.FORWARD, Vector3.RIGHT, Vector3.BACK, Vector3.LEFT]
 var turn_index = 0
 
-var actions = ["turn-right", "forward", "forward", "turn-right", "forward", "forward", "forward", "turn-left", "forward"]
+var actions = []
 var action_index = -1
 var action_complete = false
 
@@ -42,6 +42,8 @@ func do_action():
 		if action == "turn-left":
 			turn_index = (turn_index - 1) % len(turns)
 			action_complete = true
+		if action == "kick":
+			anim.play("Kick")
 	else:
 		pass
 		

@@ -10,9 +10,9 @@ margin_bottom = -24.0
 
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_left = 728.0
-margin_top = 48.0
+margin_top = 136.0
 margin_right = 982.0
-margin_bottom = 295.0
+margin_bottom = 383.0
 color = Color( 0, 0, 0, 0.392157 )
 
 [node name="Button1" type="Button" parent="ColorRect"]
@@ -21,7 +21,7 @@ margin_top = 16.0
 margin_right = 66.0
 margin_bottom = 66.0
 rect_min_size = Vector2( 50, 50 )
-rect_pivot_offset = Vector2( 25, 25 )
+rect_pivot_offset = Vector2( 208, 24 )
 disabled = true
 clip_text = true
 
@@ -31,7 +31,7 @@ margin_top = 16.0
 margin_right = 122.0
 margin_bottom = 66.0
 rect_min_size = Vector2( 50, 50 )
-rect_pivot_offset = Vector2( 25, 25 )
+rect_pivot_offset = Vector2( 152, 24 )
 clip_text = true
 
 [node name="Button3" type="Button" parent="ColorRect"]
@@ -40,7 +40,7 @@ margin_top = 16.0
 margin_right = 178.0
 margin_bottom = 66.0
 rect_min_size = Vector2( 50, 50 )
-rect_pivot_offset = Vector2( 25, 25 )
+rect_pivot_offset = Vector2( 96, 24 )
 clip_text = true
 
 [node name="Button4" type="Button" parent="ColorRect"]
@@ -49,7 +49,7 @@ margin_top = 16.0
 margin_right = 234.0
 margin_bottom = 66.0
 rect_min_size = Vector2( 50, 50 )
-rect_pivot_offset = Vector2( 24, 24 )
+rect_pivot_offset = Vector2( 40, 24 )
 clip_text = true
 
 [node name="Button5" type="Button" parent="ColorRect"]
@@ -124,11 +124,51 @@ rect_min_size = Vector2( 50, 50 )
 rect_pivot_offset = Vector2( 24, 24 )
 clip_text = true
 
+[node name="Forward" type="Button" parent="."]
+margin_left = 608.0
+margin_top = 64.0
+margin_right = 658.0
+margin_bottom = 114.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 208, 24 )
+text = "forward"
+clip_text = true
+
+[node name="TurnLeft" type="Button" parent="."]
+margin_left = 664.0
+margin_top = 64.0
+margin_right = 714.0
+margin_bottom = 114.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 152, 24 )
+text = "turn-left"
+clip_text = true
+
+[node name="TurnRight" type="Button" parent="."]
+margin_left = 720.0
+margin_top = 64.0
+margin_right = 770.0
+margin_bottom = 114.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 96, 24 )
+text = "turn-right"
+clip_text = true
+
+[node name="Kick" type="Button" parent="."]
+margin_left = 776.0
+margin_top = 64.0
+margin_right = 826.0
+margin_bottom = 114.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 40, 24 )
+text = "kick"
+clip_text = true
+
 [node name="Dragger" type="Label" parent="."]
-margin_left = 184.0
-margin_top = 152.0
-margin_right = 234.0
-margin_bottom = 166.0
+margin_left = 183.04
+margin_top = 158.709
+margin_right = 233.04
+margin_bottom = 172.709
 rect_rotation = -15.0
 rect_pivot_offset = Vector2( 25, 7.00003 )
 text = "dragged"

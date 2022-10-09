@@ -17,6 +17,13 @@ onready var btn10 = get_node("ColorRect/Button10")
 onready var btn11 = get_node("ColorRect/Button11")
 onready var btn12 = get_node("ColorRect/Button12")
 
+onready var forward_action = get_node("Forward")
+onready var turn_left_action = get_node("TurnLeft")
+onready var turn_right_action = get_node("TurnRight")
+onready var kick_action = get_node("Kick")
+
+onready var draggable_actions = [forward_action, turn_left_action, turn_right_action, kick_action]
+
 onready var btns = [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, btn11, btn12]
 
 onready var bot = get_node("../Bot")
@@ -30,12 +37,7 @@ func _ready():
 	dragger.visible = false
 	var i = 0
 	for btn in btns:
-		if i < len(bot.actions):
-			btn.text = bot.actions[i]
-			btn.disabled = true
-		else:
-			btn.visible = false
-		i += 1
+		btn.disabled = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -51,6 +53,14 @@ func _process(delta):
 				if mouseIsOverButton:
 					dragger.text = btn.text
 					btn.text = ""
+					
+		for act in draggable_actions:
+			var pos = act.get_local_mouse_position()
+			var rect = Rect2(Vector2.ZERO, act.rect_size)
+			var mouseIsOverButton = rect.has_point(pos)
+			if mouseIsOverButton:
+				dragger.text = act.text
+				
 	elif Input.is_action_just_released("click"):
 		bot.actions = []
 		for btn in btns:

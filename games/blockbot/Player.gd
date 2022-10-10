@@ -23,6 +23,7 @@ signal place_block(pos, norm, type)
 signal destroy_block(pos, norm)
 signal highlight_block(pos, norm)
 signal unhighlight_block()
+signal dead(pos)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -96,6 +97,7 @@ func _physics_process(delta):
 		velocity = move_and_slide(velocity, Vector3.UP)
 		
 		if self.translation.y < -50:
+			emit_signal("dead", self.translation)
 			print("respawning...")
 			self.translation = Vector3(0, 100, 0)
 			

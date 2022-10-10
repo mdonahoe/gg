@@ -21,8 +21,9 @@ onready var forward_action = get_node("Forward")
 onready var turn_left_action = get_node("TurnLeft")
 onready var turn_right_action = get_node("TurnRight")
 onready var kick_action = get_node("Kick")
+onready var light_action = get_node("Light")
 
-onready var draggable_actions = [forward_action, turn_left_action, turn_right_action, kick_action]
+onready var draggable_actions = [forward_action, turn_left_action, turn_right_action, kick_action, light_action]
 
 onready var btns = [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, btn11, btn12]
 

@@ -164,6 +164,16 @@ rect_pivot_offset = Vector2( 40, 24 )
 text = "kick"
 clip_text = true
 
+[node name="Light" type="Button" parent="."]
+margin_left = 831.0
+margin_top = 64.0
+margin_right = 881.0
+margin_bottom = 114.0
+rect_min_size = Vector2( 50, 50 )
+rect_pivot_offset = Vector2( 40, 24 )
+text = "light"
+clip_text = true
+
 [node name="Dragger" type="Label" parent="."]
 margin_left = 183.04
 margin_top = 158.709

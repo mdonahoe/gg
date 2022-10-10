@@ -4,7 +4,10 @@ var Chunk = load("res://Chunk.gd")
 
 onready var anim = get_node("AnimationPlayer")
 onready var player = get_node("../Player")
-onready var goal_outline = get_node("../GoalBlock")
+onready var goal_outline = get_node("../GoalOutline")
+onready var domino = get_node("../Domino")
+
+signal toggle_light(pos)
 
 const SPEED = 5
 var velocity = Vector3.ZERO
@@ -21,6 +24,7 @@ var actions = []
 var action_index = -1
 var action_complete = false
 var kick_time = 0.0
+var activate_time = 0.0
 
 func set_goal_block(pos: Vector3):
 	goal_block = pos
@@ -50,6 +54,9 @@ func do_action():
 			action_complete = true
 		if action == "kick":
 			kick_time = 1.0
+		if action == "light":
+			activate_time = 1.0
+			
 			# action is NOT complete.
 	else:
 		pass
@@ -94,9 +101,26 @@ func _physics_process(delta):
 	if kick_time > 0:
 		anim.play("Kick")
 		kick_time -= delta
-		if kick_time < delta:
+		if kick_time < 0.5 and abs(domino.omega) < 0.1:
+			var dom_dist = domino.translation - self.translation
+			dom_dist.y = 0  # this is a cheat
+			if dom_dist.length() < 2.0:
+				print("kicking domino")
+				domino.topple(0.6)
+			else:
+				print("too far away")
+		if kick_time < 0.0:
 			print("kick_complete")
 			action_complete = true
+	
+	elif activate_time > 0:
+		anim.play("Attack1")
+		activate_time -= delta
+		if activate_time < 0.0:
+			print("activate complete")
+			emit_signal("toggle_light", self.translation)
+			action_complete = true
+
 	elif dist > 0.8:
 		new_state = "fast"
 		var direction = dp.normalized() * SPEED
@@ -120,6 +144,16 @@ func _physics_process(delta):
 	
 	set_state(new_state)
 	velocity = move_and_slide(velocity, Vector3.UP)
+	
+	for i in get_slide_count():
+		var collision = get_slide_collision(i)
+		if collision.collider.name == "Domino":
+			var dist_to_domino = domino.translation - self.translation
+			print("bumping domino", dist_to_domino)
+			var domino_direction = dist_to_domino.normalized()
+			domino.velocity += domino_direction * 1.0
+		if collision.collider.name.find("Light") == 0:
+			print(collision.collider)
 	
 	if self.translation.y < -50:
 		print("bot respawning...")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://WorldScript.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -7,6 +7,9 @@
 [ext_resource path="res://Bot.gd" type="Script" id=5]
 [ext_resource path="res://ControlPanel.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ControlPanel.gd" type="Script" id=7]
+[ext_resource path="res://assets/GoalMaterial.tres" type="Material" id=8]
+[ext_resource path="res://Domino.tscn" type="PackedScene" id=9]
+[ext_resource path="res://lightblock_material.tres" type="Material" id=10]
 
 [sub_resource type="ProceduralSky" id=1]
 sky_top_color = Color( 1, 1, 1, 1 )
@@ -48,6 +51,34 @@ transform = Transform( 0.909614, 0.00915034, -0.415354, 0.415455, -0.0200341, 0.
 shadow_enabled = true
 
 [node name="BlockOutline" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 73.546, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.45231, 76.9593, 5.6143 )
 mesh = SubResource( 3 )
 material/0 = ExtResource( 3 )
+
+[node name="GoalOutline" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.8261, 73.546, 5.38885 )
+mesh = SubResource( 3 )
+material/0 = ExtResource( 8 )
+
+[node name="LightBlock1" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4116, 73.546, 6.09123 )
+mesh = SubResource( 3 )
+material/0 = ExtResource( 10 )
+
+[node name="LightBlock2" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.8667, 73.546, 0 )
+mesh = SubResource( 3 )
+material/0 = ExtResource( 10 )
+
+[node name="LightBlock3" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.8261, 73.546, -7.16101 )
+mesh = SubResource( 3 )
+material/0 = ExtResource( 10 )
+
+[node name="LightBlock4" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12.6981, 73.546, 0 )
+mesh = SubResource( 3 )
+material/0 = ExtResource( 10 )
+
+[node name="Domino" parent="." instance=ExtResource( 9 )]
+transform = Transform( 0.0421373, 0, 0.999112, 0, 1, 0, -0.999112, 0, 0.0421373, 4.31276, 75.2826, 4.82279 )

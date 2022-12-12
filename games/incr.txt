@@ -1,0 +1,22 @@
+Incremental Game Jam 2023
+====================
+
+# Engines
+
+1. Shadertoy! https://blog.demofox.org/2016/01/16/making-a-ray-traced-snake-game-in-shadertoy/
+2. https://www.raylib.com/index.html
+3. PixiJS https://itch.io/games/made-with-pixijs
+4. Pico8 "fantasy console" https://www.lexaloffle.com/pico-8.php
+5. love2d? lua
+6. make a text-only game with browserpad https://github.com/browserpad/browserpad
+7. use gotty to host a terminal game in the web.
+
+
+# Concepts
+
+1. SNAKE, but you are a general giving commands to thousands of snakes at once.
+2. play a game inside it's own code. Be careful!
+3. text-only game where you unlock new words and spells. Text-based NOITA? (Can you even have a "clicky game" without a mouse???)
+4. What would STRANGE LOOP be as a game?
+5. Give feedback to ChatGPT by clicking on it's words. It talks to you, and you give it reinforcement.
+6. 2048, but with combining words into higher-level concepts, exploring the tech tree.

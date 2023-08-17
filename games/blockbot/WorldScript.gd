@@ -68,6 +68,19 @@ func _on_Bot_toggle_light(pos):
 		if dist < 1.0:
 			print("did toggle: ", light)
 			light.translation.y += 1
+	# and create a block at the bots position
+	
+	# Get chunk from pos
+	var cx = int(floor(pos.x / Chunk.DIMENSION.x))
+	var cz = int(floor(pos.z / Chunk.DIMENSION.z))
+
+	# Get block from pos
+	var bx = fposmod(floor(pos.x), Chunk.DIMENSION.x) + 0.5
+	var by = fposmod(floor(pos.y), Chunk.DIMENSION.y) + 0.5
+	var bz = fposmod(floor(pos.z), Chunk.DIMENSION.z) + 0.5
+	var t = "Log"
+	pw.call_deferred("change_block", cx, cz, bx, by, bz, t)
+
 
 
 func _on_Player_dead(pos):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://WorldScript.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://assets/GoalMaterial.tres" type="Material" id=8]
 [ext_resource path="res://Domino.tscn" type="PackedScene" id=9]
 [ext_resource path="res://lightblock_material.tres" type="Material" id=10]
+[ext_resource path="res://domino.tres" type="Material" id=11]
 
 [sub_resource type="ProceduralSky" id=1]
 sky_top_color = Color( 1, 1, 1, 1 )
@@ -29,6 +30,11 @@ dof_blur_far_transition = 50.0
 
 [sub_resource type="CubeMesh" id=3]
 size = Vector3( 1.01, 1.01, 1.01 )
+
+[sub_resource type="ConvexPolygonShape" id=4]
+points = PoolVector3Array( 1, 1, 1, 1, 1, -1, -1, 1, 1, 1, -1, 1, 1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, -1 )
+
+[sub_resource type="CubeMesh" id=5]
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 1 )
@@ -82,3 +88,45 @@ material/0 = ExtResource( 10 )
 
 [node name="Domino" parent="." instance=ExtResource( 9 )]
 transform = Transform( 0.0421373, 0, 0.999112, 0, 1, 0, -0.999112, 0, 0.0421373, 4.31276, 75.2826, 4.82279 )
+
+[node name="rgBox" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.80247, 80.2454, 7.50248 )
+mass = 10.0
+
+[node name="CollisionShape" type="CollisionShape" parent="rgBox"]
+transform = Transform( 1, 0, 0, 0, 2, 0, 0, 0, 0.3, 0, 0, 0 )
+shape = SubResource( 4 )
+
+[node name="MeshInstance" type="MeshInstance" parent="rgBox/CollisionShape"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 5 )
+skeleton = NodePath("../../..")
+material/0 = ExtResource( 11 )
+
+[node name="rgBox2" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.80247, 80.2454, 9.1456 )
+mass = 100.0
+
+[node name="CollisionShape" type="CollisionShape" parent="rgBox2"]
+transform = Transform( 1, 0, 0, 0, 2, 0, 0, 0, 0.3, 0, 0, 0 )
+shape = SubResource( 4 )
+
+[node name="MeshInstance" type="MeshInstance" parent="rgBox2/CollisionShape"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 5 )
+skeleton = NodePath("../../..")
+material/0 = ExtResource( 11 )
+
+[node name="rgBox3" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.80247, 80.2454, 10.8659 )
+mass = 100.0
+
+[node name="CollisionShape" type="CollisionShape" parent="rgBox3"]
+transform = Transform( 1, 0, 0, 0, 2, 0, 0, 0, 0.3, 0, 0, 0 )
+shape = SubResource( 4 )
+
+[node name="MeshInstance" type="MeshInstance" parent="rgBox3/CollisionShape"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 5 )
+skeleton = NodePath("../../..")
+material/0 = ExtResource( 11 )

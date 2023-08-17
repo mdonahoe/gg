@@ -94,7 +94,9 @@ func _physics_process(delta):
 			velocity.x = direction.x * SPEED
 			velocity.z = direction.z * SPEED
 		velocity.y -= gravity * delta
-		velocity = move_and_slide(velocity, Vector3.UP)
+		# Vector3 move_and_slide(linear_velocity: Vector3, up_direction: Vector3 = Vector3( 0, 0, 0 ), stop_on_slope: bool = false, max_slides: int = 4, floor_max_angle: float = 0.785398, infinite_inertia: bool = true)
+
+		velocity = move_and_slide(velocity, Vector3.UP, false, 4, 0.785, false)
 		
 		if self.translation.y < -50:
 			emit_signal("dead", self.translation)

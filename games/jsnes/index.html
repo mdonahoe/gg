@@ -1,0 +1,268 @@
+﻿<!doctype html>
+<head>
+<title>JSNES lite</title>
+<style>
+body { font: 14px Arial }
+#container {
+    display: flex;
+    height: 100%;
+    background: #222;
+}
+#right-side {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+#canvas {
+    background: #000;
+    height: calc(100vmin - 80px);
+    width: calc((100vmin - 80px) * 1.067);
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+#memory {
+    background: #000;
+    height: 360px;
+    width: 720px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    flex: 1;
+}
+#rom {
+    flex: 1;
+    background: #000;
+    height: 512px;
+    width: 512px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+</style>
+</head>
+<html>
+<body>
+
+<div id=container>
+    <canvas id=canvas width=256 height=240 style="background: #000"></canvas>
+    <div id=rightside>
+        <canvas id=memory width=64 height=32 style="background: #000"></canvas>
+        <canvas id=rom width=256 height=256 style="background: #000"></canvas>
+    </div>
+</div>
+
+<br><b>Controls</b>: arrow keys + X + C + Start + Esc<br>
+
+<button id=dk onclick='play("roms/dk.nes")'>DK</button>
+<button id=smb onclick='play("roms/smb.nes")'>SMB</button>
+<input type=file id=fileInput>
+
+</body>
+<script src="src/nes.js"></script>
+<script src="src/rom.js"></script>
+<script src="src/controller.js"></script>
+<script src="src/cpu.js"></script>
+<script src="src/mappers.js"></script>
+<script src="src/papu.js"></script>
+<script src="src/ppu.js"></script>
+<script src="src/tile.js"></script>
+<script src="src/utils.js"></script>
+<script>
+
+    
+// Canvas + framebuffer
+// ====================
+
+var ctx = canvas.getContext("2d");
+var imageData = ctx.getImageData(0,0,256,240);
+var frameBuffer = new ArrayBuffer(imageData.data.length);
+var frameBuffer8 = new Uint8ClampedArray(frameBuffer);
+var frameBuffer32 = new Uint32Array(frameBuffer);
+
+var memCtx = memory.getContext("2d");
+var memImageData = memCtx.getImageData(0,0,64,32);
+var memFrameBuffer = new ArrayBuffer(memImageData.data.length);
+var memFrameBuffer8 = new Uint8ClampedArray(memFrameBuffer);
+var memFrameBuffer32 = new Uint32Array(memFrameBuffer);
+
+var hisCtx = rom.getContext("2d");
+var hisImageData = hisCtx.getImageData(0,0,256,256);
+var hisFrameBuffer = new ArrayBuffer(hisImageData.data.length);
+var hisFrameBuffer8 = new Uint8ClampedArray(hisFrameBuffer);
+var hisFrameBuffer32 = new Uint32Array(hisFrameBuffer);
+
+// AudioContext + audio buffers + samples lists
+// =============================================
+
+var leftSamples = [];
+var rightSamples = [];
+var currentSample = 0;
+
+const HSBToRGB = (h, s, b) => {
+  if (h == 0) { b = 0;}
+  s /= 100;
+  b /= 100;
+  const k = (n) => (n + h / 60) % 6;
+  const f = (n) => b * (1 - s * Math.max(0, Math.min(k(n), 4 - k(n), 1)));
+  r = 255 * f(5);
+  g = 255 * f(3);
+  b = 255 * f(1);
+  return 0xff000000 | b << 16 | g << 8 | r;
+};
+
+// Load ROM + Start emulator
+// =========================
+start = file => {
+
+  // Clean UI
+  fileInput.remove();
+  dk.remove();
+  smb.remove()
+
+  // Initialize JSNES
+  NES.init({
+    
+    // Display each new frame on the canvas
+    onFrame: function(frameBuffer){
+      var i = 0;
+      for(var y = 0; y < 256; ++y){
+        for(var x = 0; x < 240; ++x){
+          i = y * 256 + x;
+          frameBuffer32[i] = 0xff000000 | frameBuffer[i];
+        }
+      }
+      imageData.data.set(frameBuffer8);
+      ctx.putImageData(imageData, 0, 0);
+
+      i = 0;
+      for(var y = 0; y < 32; ++y){
+        for(var x = 0; x < 64; ++x){
+          i = y * 64 + x;
+          reg = HSBToRGB(NES.cpu.mem[i], 100, 100)
+          memFrameBuffer32[i] = reg;
+        }
+      }
+      memImageData.data.set(memFrameBuffer8);
+      memCtx.putImageData(memImageData, 0, 0);
+      i = 0;
+      for(var y = 0; y < 256; ++y){
+        for(var x = 0; x < 256; ++x){
+          i = y * 256 + x;
+          reg = NES.romData.charCodeAt(i) & 0xff
+          hisFrameBuffer32[i] = HSBToRGB(reg, 100, 100);
+        }
+      }
+      hisImageData.data.set(hisFrameBuffer8);
+      hisCtx.putImageData(hisImageData, 0, 0);
+          //hisFrameBuffer32[i] = 0xff000000 | hisFrameBuffer32[i] | reg;
+    },
+    
+    // Add new audio samples to the Audio buffers
+    onAudioSample: function(left, right){
+      leftSamples.push(left);
+      rightSamples.push(right);
+    },
+    
+    // Pass the browser's sample rate to the emulator
+    sampleRate: 44100,
+  });
+
+  // Send ROM to emulator
+  NES.loadROM(file);
+  
+  // 60 fps loop
+  setInterval(NES.frame, 16);
+  
+  // Controller #1 keys listeners
+  onkeydown = e => {
+    if(e.keyCode == 37) NES.buttonDown(1, Controller.BUTTON_LEFT);
+    else if(e.keyCode == 38) NES.buttonDown(1, Controller.BUTTON_UP);
+    else if(e.keyCode == 39) NES.buttonDown(1, Controller.BUTTON_RIGHT);
+    else if(e.keyCode == 40) NES.buttonDown(1, Controller.BUTTON_DOWN);
+    else if(e.keyCode == 88) NES.buttonDown(1, Controller.BUTTON_A); // X
+    else if(e.keyCode == 67) NES.buttonDown(1, Controller.BUTTON_B); // C
+    else if(e.keyCode == 27) NES.buttonDown(1, Controller.BUTTON_SELECT);
+    else if(e.keyCode == 13) NES.buttonDown(1, Controller.BUTTON_START);
+  }
+
+  onkeyup = e => {
+    if(e.keyCode == 37) NES.buttonUp(1, Controller.BUTTON_LEFT);
+    else if(e.keyCode == 38) NES.buttonUp(1, Controller.BUTTON_UP);
+    else if(e.keyCode == 39) NES.buttonUp(1, Controller.BUTTON_RIGHT);
+    else if(e.keyCode == 40) NES.buttonUp(1, Controller.BUTTON_DOWN);
+    else if(e.keyCode == 88) NES.buttonUp(1, Controller.BUTTON_A); // X
+    else if(e.keyCode == 67) NES.buttonUp(1, Controller.BUTTON_B); // C
+    else if(e.keyCode == 27) NES.buttonUp(1, Controller.BUTTON_SELECT);
+    else if(e.keyCode == 13) NES.buttonUp(1, Controller.BUTTON_START);
+  }
+};
+
+// Load ROM from file input
+fileInput.onchange = () => {
+  var fileReader = new FileReader();
+  fileReader.readAsBinaryString(fileInput.files[0]);
+  fileReader.onload = () => {
+    start(fileReader.result);
+  }
+}
+
+// load ROM from disk
+play = path => {
+  var audio = new AudioContext();
+  var audioprocessor = audio.createScriptProcessor(512, 0, 2);
+  audioprocessor.connect(audio.destination);
+
+  // When the Audio processor requests new samples to play
+  audioprocessor.onaudioprocess = audioEvent => {
+
+    // Ensure that we've buffered enough samples
+    if(leftSamples.length > currentSample + 512){
+      for(var i = 0; i < 512; i++){
+      
+        // Output (play) the buffers
+        audioEvent.outputBuffer.getChannelData(0)[i] = leftSamples[currentSample];
+        audioEvent.outputBuffer.getChannelData(1)[i] = rightSamples[currentSample];
+        currentSample++;
+      }
+    }
+  }
+  file = new XMLHttpRequest;
+  file.open('GET', path);
+  file.overrideMimeType("text/plain; charset=x-user-defined");
+  file.send();
+  file.onload = function(){
+    start(file.responseText);
+  }
+
+    var memoryCanvas = document.getElementById("memory");
+    memoryCanvas.addEventListener("click", function(event) {
+        var rect = memoryCanvas.getBoundingClientRect();
+        var scaleX = memoryCanvas.width / rect.width;
+        var scaleY = memoryCanvas.height / rect.height;
+
+        var clickedX = (event.clientX - rect.left) * scaleX;
+        var clickedY = (event.clientY - rect.top) * scaleY;
+
+        var x = Math.floor(clickedX);
+        var y = Math.floor(clickedY);
+
+        var i = y * 64 + x;
+        NES.cpu.mem[i] = 0;
+    });
+    /*
+    var historyCanvas = document.getElementById("rom");
+    historyCanvas.addEventListener("click", function(event) {
+        var rect = historyCanvas.getBoundingClientRect();
+        var scaleX = historyCanvas.width / rect.width;
+        var scaleY = historyCanvas.height / rect.height;
+
+        var clickedX = (event.clientX - rect.left) * scaleX;
+        var clickedY = (event.clientY - rect.top) * scaleY;
+
+        var x = Math.floor(clickedX);
+        var y = Math.floor(clickedY);
+
+        var i = y * 64 + x;
+        NES.ppu.vramMem[i] = 0;
+    });
+    */
+}
+</script>
